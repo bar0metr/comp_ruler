@@ -1,0 +1,94 @@
+object mainform: Tmainform
+  Left = 408
+  Height = 481
+  Top = 175
+  Width = 419
+  Caption = 'Computer Ruler'
+  ClientHeight = 481
+  ClientWidth = 419
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  Position = poScreenCenter
+  LCLVersion = '5.9'
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 20
+    Top = 461
+    Width = 419
+    Panels = <    
+      item
+        Text = 'Computer Ruler'
+        Width = 200
+      end    
+      item
+        Alignment = taCenter
+        Width = 200
+      end>
+    SimplePanel = False
+  end
+  object ScrollBox1: TScrollBox
+    Left = 0
+    Height = 461
+    Top = 0
+    Width = 419
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    Align = alClient
+    TabOrder = 1
+    OnClick = ScrollBox1Click
+  end
+  object SQLQuery1: TSQLQuery
+    PacketRecords = 4000
+    FieldDefs = <>
+    AutoCalcFields = False
+    Database = MySQL55Connection1
+    Transaction = SQLTransaction1
+    ReadOnly = True
+    SQL.Strings = (
+      'select * from users;'
+    )
+    Options = []
+    Params = <>
+    left = 72
+    top = 48
+  end
+  object SQLTransaction1: TSQLTransaction
+    Active = False
+    Action = caCommit
+    Database = MySQL55Connection1
+    Options = []
+    left = 216
+    top = 48
+  end
+  object MySQL55Connection1: TMySQL55Connection
+    Connected = False
+    LoginPrompt = False
+    DatabaseName = 'sysinfo'
+    KeepConnection = True
+    Params.Strings = (
+      'Port=3306'
+    )
+    Password = 'S111yy111'
+    Transaction = SQLTransaction1
+    UserName = 'sysinfo'
+    CharSet = 'UTF8'
+    HostName = '192.168.3.4'
+    LogEvents = []
+    Options = []
+    SkipLibraryVersionCheck = True
+    left = 168
+    top = 48
+  end
+  object DataSource1: TDataSource
+    DataSet = SQLQuery1
+    left = 120
+    top = 48
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 5000
+    OnTimer = Timer1Timer
+    left = 67
+    top = 123
+  end
+end
