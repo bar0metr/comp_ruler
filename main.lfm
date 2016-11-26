@@ -63,16 +63,12 @@ object mainform: Tmainform
   object MySQL55Connection1: TMySQL55Connection
     Connected = False
     LoginPrompt = False
-    DatabaseName = 'sysinfo'
     KeepConnection = True
     Params.Strings = (
       'Port=3306'
     )
-    Password = 'S111yy111'
     Transaction = SQLTransaction1
-    UserName = 'sysinfo'
     CharSet = 'UTF8'
-    HostName = '192.168.3.4'
     LogEvents = []
     Options = []
     SkipLibraryVersionCheck = True

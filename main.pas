@@ -7,7 +7,7 @@ interface
 uses
 
   Classes, SysUtils, sqldb, db, mysql55conn, FileUtil, Forms, Controls,
-  Graphics, Dialogs, ComCtrls, Process, ExtCtrls, StdCtrls, PingThread;
+  Graphics, Dialogs, ComCtrls, Process, ExtCtrls, StdCtrls, PingThread, IniFiles;
 
 type
 
@@ -30,7 +30,10 @@ type
     { private declarations }
   public
         procedure get_computers;
+        procedure Get_ProgName;
         procedure pinger;
+        procedure Read_INI;
+      //  procedure Write_INI;
   end;
 
 type Tpings = record
@@ -39,6 +42,9 @@ type Tpings = record
   type TComputers = record
    comp_: string;
  end;
+
+Const
+  Config_Name='config.ini';
 
 var
   mainform: Tmainform;
@@ -53,17 +59,42 @@ var
   computers: array of TComputers;
   computer: integer;
   pathexe: string;
+  db_name,db_user,db_pass,db_address,db_port: string;
+
+
  // pingthreades: array of TMyThread;
 implementation
 
 {$R *.lfm}
 
+procedure TMainForm.Get_ProgName;
+begin
+  pathexe:= includetrailingbackslash(extractfilepath(application.ExeName));
+end;
+
+procedure Tmainform.Read_INI;
+var
+  INI: TINIFile;
+begin
+  INI := TINIFile.Create(pathexe+config_name);
+  db_name:= INI.ReadString('DB','DB_NAME','');
+  db_user:= INI.ReadString('DB','DB_USER','');
+  db_pass:= INI.ReadString('DB','DB_PASS','');
+  db_address:= INI.ReadString('DB','DB_ADDRESS','');
+  db_port:= INI.ReadString('DB','DB_PORT','');
+end;
 
 procedure Tmainform.get_computers;
 var
   i: integer;
 begin
   StatusBar1.Panels[1].Text:='Подключение...   ';
+  MySQL55Connection1.HostName:= db_address;
+  MySQL55Connection1.DatabaseName:= db_name;
+  MySQL55Connection1.UserName:= db_user;
+  MySQL55Connection1.Password:= db_pass;
+  MySQL55Connection1.Port:= strtoint(db_port);;
+
    try
     MySQL55Connection1.Connected:=true;
   except
@@ -202,12 +233,13 @@ end;
 
 procedure Tmainform.FormCreate(Sender: TObject);
 begin
-  pathexe:= includetrailingbackslash(extractfilepath(application.ExeName));
+  Get_ProgName;
   pinger_complete:= true;
   top_comp:= 8;
-  get_computers;
-  statusbar1.Panels[1].Text := 'In Progress...     ';
-  timer1.Enabled:= true;
+  Read_INI;
+  Get_computers;
+ // statusbar1.Panels[1].Text := 'In Progress...     ';
+  //timer1.Enabled:= true;
 end;
 
 
