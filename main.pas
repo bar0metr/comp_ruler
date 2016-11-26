@@ -238,8 +238,8 @@ begin
   top_comp:= 8;
   Read_INI;
   Get_computers;
- // statusbar1.Panels[1].Text := 'In Progress...     ';
-  //timer1.Enabled:= true;
+  statusbar1.Panels[1].Text := 'In Progress...     ';
+  timer1.Enabled:= true;
 end;
 
 
